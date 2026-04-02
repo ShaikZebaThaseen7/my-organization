@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Donate | Charity Trust{% endblock %}
+{% block content %}
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="p-4 bg-white rounded shadow-sm">
+        <h1 class="h4 mb-2">Make a donation</h1>
+        <p class="text-muted mb-4">Scan the QR code and pay. Then submit the UTR number for admin verification.</p>
+
+        <form method="POST" action="{{ url_for('public.donate') }}" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label class="form-label">Donor name</label>
+            <input type="text" name="name" class="form-control" required minlength="2">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Amount</label>
+            <div class="input-group">
+              <span class="input-group-text">₹</span>
+              <input type="number" name="amount" class="form-control" required min="1" step="1">
+            </div>
+            <div class="form-text">Enter an amount in whole rupees.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Campaign (optional)</label>
+            <select name="campaign_id" class="form-select">
+              <option value="">General support</option>
+              {% for c in campaigns %}
+                <option value="{{ c.id }}">{{ c.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-dark w-100">Create payment</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="p-4 bg-white rounded shadow-sm">
+        <h2 class="h6 mb-2">How it works</h2>
+        <ol class="text-muted mb-0">
+          <li>Create payment request</li>
+          <li>Pay using QR</li>
+          <li>Submit UTR number</li>
+          <li>Admin verifies and records transaction</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

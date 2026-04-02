@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == 'create' %}Create Post{% else %}Edit Post{% endif %} | Admin | Charity Trust{% endblock %}
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="p-4 bg-white rounded shadow-sm">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h1 class="h4 mb-0">{% if mode == 'create' %}Create Post{% else %}Edit Post{% endif %}</h1>
+          <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('admin.posts_list') }}">Back</a>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input name="title" class="form-control" required minlength="3" value="{{ post.title if post else '' }}">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Content</label>
+            <textarea name="content" class="form-control" rows="6" required minlength="10">{{ post.content if post else '' }}</textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Image (optional)</label>
+            <input type="file" name="image" class="form-control" accept="image/*">
+            {% if mode == 'edit' and post.image_filename %}
+              <div class="mt-2">
+                <img src="{{ url_for('static', filename='uploads/' ~ post.image_filename) }}" alt="" style="max-height:120px;">
+              </div>
+            {% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-dark w-100">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

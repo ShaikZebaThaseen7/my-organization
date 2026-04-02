@@ -1,0 +1,9 @@
+/* Minimal styling layered over Bootstrap */
+body {
+  min-height: 100vh;
+}
+
+.card-img-top {
+  object-fit: cover;
+}
+

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Home | Charity Trust{% endblock %}
+{% block content %}
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="p-4 bg-white rounded shadow-sm">
+        <h1 class="h3 mb-3">Charity Trust</h1>
+        <p class="text-muted mb-2">
+          We support community needs with a focus on transparent, trackable spending and verified donations.
+        </p>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="border rounded p-3 h-100">
+              <h2 class="h6">Mission</h2>
+              <p class="mb-0">Deliver essentials and learning support to those who need it most.</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="border rounded p-3 h-100">
+              <h2 class="h6">Vision</h2>
+              <p class="mb-0">A community where every donation is accounted for and visibly used.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="p-4 bg-white rounded shadow-sm">
+        <h2 class="h5 mb-3">What we do</h2>
+        <ul class="mb-0 text-muted">
+          <li>Food distribution</li>
+          <li>Donations for essential supplies</li>
+          <li>Student support and learning materials</li>
+        </ul>
+        <hr>
+        <a class="btn btn-dark w-100" href="{{ url_for('public.transparency') }}">View transparency dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <h2 class="h5 mb-0">Recent activities</h2>
+      <a class="link-secondary" href="{{ url_for('public.posts_list') }}">See updates</a>
+    </div>
+    <div class="row g-3">
+      {% for post in recent_posts %}
+        <div class="col-md-4">
+          <div class="card h-100">
+            {% if post.image_filename %}
+              <img class="card-img-top" src="{{ url_for('static', filename='uploads/' ~ post.image_filename) }}" alt="">
+            {% endif %}
+            <div class="card-body">
+              <h3 class="h6">{{ post.title }}</h3>
+              <p class="text-muted small mb-2">{{ post.created_at.strftime('%Y-%m-%d') }}</p>
+              <a class="stretched-link" href="{{ url_for('public.post_detail', post_id=post.id) }}"></a>
+              <a class="btn btn-sm btn-outline-primary mt-2" href="{{ url_for('public.post_detail', post_id=post.id) }}">Read more</a>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="col-12 text-muted">No posts yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <h2 class="h5 mb-2">Latest transactions</h2>
+    <div class="table-responsive bg-white rounded shadow-sm">
+      <table class="table table-striped table-hover mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in recent_transactions %}
+            <tr>
+              <td>{{ t.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>
+                {% if t.type == 'income' %}
+                  <span class="badge text-bg-success">Income</span>
+                {% else %}
+                  <span class="badge text-bg-danger">Expense</span>
+                {% endif %}
+              </td>
+              <td>₹ {{ (t.amount_cents / 100) | round(2) }}</td>
+              <td>{{ t.purpose }}</td>
+            </tr>
+          {% else %}
+            <tr><td colspan="4" class="text-muted">No transactions yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Payment QR | Charity Trust{% endblock %}
+{% block content %}
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="p-4 bg-white rounded shadow-sm">
+        <h1 class="h4 mb-3">Pay via QR</h1>
+        <p class="text-muted mb-2">
+          Amount: <span class="fw-semibold">₹ {{ (donation.amount_cents / 100) | round(2) }}</span>
+        </p>
+        <p class="text-muted mb-3">
+          To: <span class="fw-semibold">Charity Trust</span>
+        </p>
+
+        <div class="d-flex justify-content-center mb-3">
+          <div id="qrcode" class="p-2 border rounded bg-white"></div>
+        </div>
+
+        <div class="alert alert-info">
+          Scan the QR using your UPI app and complete the payment. Then submit your UTR number.
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+        <script>
+          // QR generation is client-side to keep server simple.
+          new QRCode(document.getElementById("qrcode"), {
+            text: "{{ qr_payload }}",
+            width: 220,
+            height: 220,
+            correctLevel: QRCode.CorrectLevel.M
+          });
+        </script>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="p-4 bg-white rounded shadow-sm">
+        <h2 class="h5 mb-3">Submit UTR</h2>
+        <form method="POST" action="{{ url_for('public.donate_verify', donation_id=donation.id) }}" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label class="form-label">UTR number</label>
+            <input type="text" name="utr" class="form-control" required minlength="6">
+            <div class="form-text">You can find it in your payment confirmation.</div>
+          </div>
+          <button type="submit" class="btn btn-dark w-100">Submit UTR</button>
+          <a href="{{ url_for('public.donate') }}" class="btn btn-outline-secondary w-100 mt-2">Make another donation</a>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

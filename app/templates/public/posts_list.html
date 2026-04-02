@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Updates | Charity Trust{% endblock %}
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h4 mb-0">Posts & Updates</h1>
+    <a class="btn btn-outline-dark btn-sm" href="{{ url_for('public.donate') }}">Support us</a>
+  </div>
+  <div class="row g-3">
+    {% for p in posts %}
+      <div class="col-lg-4">
+        <div class="card h-100 shadow-sm">
+          {% if p.image_filename %}
+            <img class="card-img-top" src="{{ url_for('static', filename='uploads/' ~ p.image_filename) }}" alt="">
+          {% endif %}
+          <div class="card-body">
+            <h2 class="h6">{{ p.title }}</h2>
+            <div class="text-muted small mb-2">{{ p.created_at.strftime('%Y-%m-%d') }}</div>
+            <p class="text-muted small">
+              {{ p.content[:120] }}{% if p.content|length > 120 %}...{% endif %}
+            </p>
+            <a class="btn btn-sm btn-outline-primary mt-2" href="{{ url_for('public.post_detail', post_id=p.id) }}">Read more</a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="col-12 text-muted">No updates yet.</div>
+    {% endfor %}
+  </div>
+{% endblock %}
+
